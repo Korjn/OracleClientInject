@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Korjn.OracleClientInject", "src\Korjn.OracleClientInject.csproj", "{AC86FA3C-8CD8-17A1-4223-5676F92D0456}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC86FA3C-8CD8-17A1-4223-5676F92D0456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC86FA3C-8CD8-17A1-4223-5676F92D0456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC86FA3C-8CD8-17A1-4223-5676F92D0456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC86FA3C-8CD8-17A1-4223-5676F92D0456}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {200D67BD-2BBC-4566-AD11-7C0F23EEEFB7}
+	EndGlobalSection
+EndGlobal
