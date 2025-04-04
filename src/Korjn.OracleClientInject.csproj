@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackRelease>true</PackRelease>
+    <PublishRelease>true</PublishRelease>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>Korjn.OracleClientInject</PackageId>
+    <Version>9.0.0</Version>
+    <Authors>Saken</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Lightweight Oracle connection factory with DI, validation, and secure configuration via IOptions pattern.</Description>
+    <PackageTags>oracle;di;connection;options;factory;ioptions;dotnet</PackageTags>
+    <RepositoryUrl>https://github.com/Korjn/OracleClientInject</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.3" PrivateAssets="none" />
+    <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.3" PrivateAssets="none" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" PrivateAssets="none" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
