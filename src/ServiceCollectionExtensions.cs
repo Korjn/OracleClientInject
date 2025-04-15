@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Korjn.OracleClientInject;
+namespace Korjn.OracleClientInject.DependencyInjection;
 
 /// <summary>
 /// Extension methods to register the Oracle connection factory and its configuration
@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddOracleClient(this IServiceCollection services, Action<OracleConnectionOptions> configure)
     {
-        services.AddOptionsWithValidateOnStart<OracleConnectionOptions>()
+        services.AddOptions<OracleConnectionOptions>()
                 .Configure(configure);
 
         services.AddSingleton<IOracleConnectionFactory, OracleConnectionFactory>();
@@ -43,8 +43,10 @@ public static class ServiceCollectionExtensions
     /// </remarks>
     public static IServiceCollection AddOracleClient(this IServiceCollection services, Action<OracleConnectionOptions, IServiceProvider> configureOptions)
     {
-        services.AddOptionsWithValidateOnStart<OracleConnectionOptions>();
-        services.AddSingleton(sp => new PostConfigureOptions<OracleConnectionOptions, IServiceProvider>(Options.DefaultName, sp, configureOptions));
+        services.AddOptions<OracleConnectionOptions>();
+
+        services.AddSingleton<IPostConfigureOptions<OracleConnectionOptions>>(sp
+            => new PostConfigureOptions<OracleConnectionOptions, IServiceProvider>(Options.DefaultName, sp, configureOptions));        
 
         services.AddSingleton<IOracleConnectionFactory, OracleConnectionFactory>();
 
