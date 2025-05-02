@@ -18,8 +18,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The updated <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddOracleClient(this IServiceCollection services, Action<OracleConnectionOptions> configure)
     {
-        services.AddOptions<OracleConnectionOptions>()
-                .Configure(configure);
+        services.AddOptions<OracleConnectionOptions>().Configure(configure);
 
         services.AddSingleton<IOracleConnectionFactory, OracleConnectionFactory>();
 
@@ -43,10 +42,10 @@ public static class ServiceCollectionExtensions
     /// </remarks>
     public static IServiceCollection AddOracleClient(this IServiceCollection services, Action<OracleConnectionOptions, IServiceProvider> configureOptions)
     {
-        services.AddOptions<OracleConnectionOptions>();
+        services.AddOptions<OracleConnectionOptions>().Configure(configureOptions);
 
-        services.AddSingleton<IPostConfigureOptions<OracleConnectionOptions>>(sp
-            => new PostConfigureOptions<OracleConnectionOptions, IServiceProvider>(Options.DefaultName, sp, configureOptions));        
+        /*services.AddSingleton<IPostConfigureOptions<OracleConnectionOptions>>(sp
+            => new PostConfigureOptions<OracleConnectionOptions, IServiceProvider>(Options.DefaultName, sp, configureOptions));*/
 
         services.AddSingleton<IOracleConnectionFactory, OracleConnectionFactory>();
 
