@@ -42,7 +42,7 @@ public record OracleConnectionOptions
     /// Maximum number of connections allowed in the pool.
     /// Default: 100
     /// </summary>
-    public int? MaxPoolSize { get; init; }
+    public int? MaxPoolSize { get; set; }
 
     /// <summary>
     /// Number of connections to be incremented when the pool is exhausted.
