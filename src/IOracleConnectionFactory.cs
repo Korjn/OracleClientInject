@@ -3,7 +3,7 @@ using Oracle.ManagedDataAccess.Client;
 namespace Korjn.OracleClientInject;
 
 /// <summary>
-/// Provides a factory abstraction for creating Oracle database connections.
+/// Provides methods for creating Oracle database connections
 /// </summary>
 public interface IOracleConnectionFactory
 {
@@ -23,32 +23,39 @@ public interface IOracleConnectionFactory
     string ConnectionString { get; }
 
     /// <summary>
-    /// Creates and opens a configured <see cref="OracleConnection"/>.
+    /// Asynchronously creates and opens an Oracle database connection using the default user credentials.
     /// </summary>
-    /// <returns>An open <see cref="OracleConnection"/> instance.</returns>
-    OracleConnection CreateConnection();
+    /// <param name="connectionOpen">An optional callback invoked when the connection is successfully opened.</param>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task representing the asynchronous operation, containing an open <see cref="OracleConnection"/> instance.</returns>
+    Task<OracleConnection> CreateConnectionAsync(Action<OracleConnectionOpenEventArgs>? connectionOpen = default,
+                                                 CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates and opens a configured <see cref="OracleConnection"/> with the specified user credentials.
+    /// Asynchronously creates and opens an Oracle database connection using the provided user name and password.
     /// </summary>
     /// <param name="userName">The Oracle user name.</param>
-    /// <param name="password">The Oracle password.</param>
-    /// <returns>An open <see cref="OracleConnection"/> instance.</returns>
-    OracleConnection CreateConnection(string userName, string password);
-
-    /// <summary>
-    /// Asynchronously creates and opens a configured <see cref="OracleConnection"/>.
-    /// </summary>
+    /// <param name="password">The Oracle user password.</param>
+    /// <param name="connectionOpen">An optional callback invoked when the connection is successfully opened.</param>
     /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A task representing the asynchronous operation. The result contains an open <see cref="OracleConnection"/> instance.</returns>
-    Task<OracleConnection> CreateConnectionAsync(CancellationToken cancellationToken);
+    /// <returns>A task representing the asynchronous operation, containing an open <see cref="OracleConnection"/> instance.</returns>
+    Task<OracleConnection> CreateConnectionAsync(string userName, string password,
+                                                 Action<OracleConnectionOpenEventArgs>? connectionOpen = default,
+                                                 CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Asynchronously creates and opens a configured <see cref="OracleConnection"/> with the specified user credentials.
+    /// Creates and opens a synchronous Oracle database connection using the default user credentials.
+    /// </summary>
+    /// <param name="connectionOpen">An optional callback invoked when the connection is successfully opened.</param>
+    /// <returns>An open <see cref="OracleConnection"/> instance.</returns>
+    OracleConnection CreateConnection(Action<OracleConnectionOpenEventArgs>? connectionOpen = default);
+
+    /// <summary>
+    /// Creates and opens a synchronous Oracle database connection using the provided user name and password.
     /// </summary>
     /// <param name="userName">The Oracle user name.</param>
-    /// <param name="password">The Oracle password.</param>
-    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-    /// <returns>A task representing the asynchronous operation. The result contains an open <see cref="OracleConnection"/> instance.</returns>
-    Task<OracleConnection> CreateConnectionAsync(string userName, string password, CancellationToken cancellationToken);
+    /// <param name="password">The Oracle user password.</param>
+    /// <param name="connectionOpen">An optional callback invoked when the connection is successfully opened.</param>
+    /// <returns>An open <see cref="OracleConnection"/> instance.</returns>
+    OracleConnection CreateConnection(string userName, string password, Action<OracleConnectionOpenEventArgs>? connectionOpen = default);
 }

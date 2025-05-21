@@ -10,7 +10,7 @@
     <PublishRelease>true</PublishRelease>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>Korjn.OracleClientInject</PackageId>
-    <Version>9.0.4</Version>
+    <Version>9.0.5</Version>
     <Authors>Saken</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Lightweight Oracle connection factory with DI, validation, and secure configuration via IOptions pattern.</Description>

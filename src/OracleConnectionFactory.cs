@@ -15,6 +15,7 @@ internal class OracleConnectionFactory : IOracleConnectionFactory
     {
         log = logger;
         _options = options.Value;
+
         _connectionStringAttributes = new Lazy<string>(BuildConnectionStringAttributes);
         _connectionStringSecurity = new Lazy<string>(() => BuildUserPasswordConnectionString(_options.UserName, _options.Password));
     }
@@ -88,12 +89,33 @@ internal class OracleConnectionFactory : IOracleConnectionFactory
         return result;
     }
 
-    private async Task<OracleConnection> CreateConnectionAsync(string connectionString, CancellationToken cancellationToken)
+    private void SetConnectionOpen(OracleConnection connection, Action<OracleConnectionOpenEventArgs>? connectionOpen = default)
+    {
+        if (!string.IsNullOrEmpty(_options.DefaultSchema) || _options.ConnectionOpen is not null || connectionOpen is not null)
+        {
+            connection.ConnectionOpen += args =>
+            {
+                if (!string.IsNullOrEmpty(_options.DefaultSchema))
+                {
+                    args.Connection.SetCurrentSchema(_options.DefaultSchema);
+                }
+
+                _options.ConnectionOpen?.Invoke(args);
+                connectionOpen?.Invoke(args);
+            };
+        }
+    }
+
+    private async Task<OracleConnection> CreateConnectionAsync(string connectionString,
+                                                               Action<OracleConnectionOpenEventArgs>? connectionOpen = default,
+                                                               CancellationToken cancellationToken = default)
     {
         var result = new OracleConnection(connectionString);
 
         try
         {
+            SetConnectionOpen(result, connectionOpen);
+
             await result.OpenAsync(cancellationToken);
 
             return result;
@@ -106,13 +128,16 @@ internal class OracleConnectionFactory : IOracleConnectionFactory
         }
     }
 
-    private OracleConnection CreateConnection(string connectionString)
+    private OracleConnection CreateConnection(string connectionString, Action<OracleConnectionOpenEventArgs>? connectionOpen = default)
     {
         var result = new OracleConnection(connectionString);
 
         try
         {
+            SetConnectionOpen(result, connectionOpen);
+
             result.Open();
+
             return result;
         }
         catch (Exception e)
@@ -123,24 +148,21 @@ internal class OracleConnectionFactory : IOracleConnectionFactory
         }
     }
 
-    public async Task<OracleConnection> CreateConnectionAsync(CancellationToken cancellationToken)
-    {
-        return await CreateConnectionAsync(_connectionStringSecurity.Value, cancellationToken);
-    }
+    public async Task<OracleConnection> CreateConnectionAsync(Action<OracleConnectionOpenEventArgs>? connectionOpen = default,
+                                                              CancellationToken cancellationToken = default) =>
+        await CreateConnectionAsync(_connectionStringSecurity.Value, connectionOpen, cancellationToken);
 
-    public async Task<OracleConnection> CreateConnectionAsync(string userName, string password, CancellationToken cancellationToken)
-    {
-        var connectionString = $"User Id={userName};Password={password};{_connectionStringAttributes.Value}";
-        return await CreateConnectionAsync(connectionString, cancellationToken);
-    }
+    public async Task<OracleConnection> CreateConnectionAsync(string userName,
+                                                              string password,
+                                                              Action<OracleConnectionOpenEventArgs>? connectionOpen = default,
+                                                              CancellationToken cancellationToken = default) =>
+    await CreateConnectionAsync(BuildUserPasswordConnectionString(userName, password), connectionOpen, cancellationToken);
 
-    public OracleConnection CreateConnection()
-    {
-        return CreateConnection(_connectionStringSecurity.Value);
-    }
+    public OracleConnection CreateConnection(Action<OracleConnectionOpenEventArgs>? connectionOpen = default) =>
+        CreateConnection(_connectionStringSecurity.Value, connectionOpen);
 
-    public OracleConnection CreateConnection(string userName, string password)
-    {        
-        return CreateConnection(BuildUserPasswordConnectionString(userName, password));
-    }
+    public OracleConnection CreateConnection(string userName,
+                                             string password,
+                                             Action<OracleConnectionOpenEventArgs>? connectionOpen = default) =>
+        CreateConnection(BuildUserPasswordConnectionString(userName, password), connectionOpen);
 }

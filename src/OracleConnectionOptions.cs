@@ -79,4 +79,6 @@ public record OracleConnectionOptions
     /// No default; required if using authentication.
     /// </summary>
     public string? Password { get; set; }
+
+    public Action<Oracle.ManagedDataAccess.Client.OracleConnectionOpenEventArgs>? ConnectionOpen { get; set; }
 }
