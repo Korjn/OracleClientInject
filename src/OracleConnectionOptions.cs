@@ -80,5 +80,13 @@ public record OracleConnectionOptions
     /// </summary>
     public string? Password { get; set; }
 
+    /// <summary>
+    /// Gets or sets a callback that is invoked when an Oracle connection is successfully opened.
+    /// This is triggered after the <c>Open</c> or <c>OpenAsync</c> methods complete successfully.
+    /// </summary>
+    /// <remarks>
+    /// This callback allows you to perform custom logic (e.g., setting the session schema)
+    /// immediately after the connection is opened.
+    /// </remarks>
     public Action<Oracle.ManagedDataAccess.Client.OracleConnectionOpenEventArgs>? ConnectionOpen { get; set; }
 }
